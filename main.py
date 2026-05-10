@@ -30,6 +30,22 @@ def addPlayer(_name,_points):
 def addTeam(_name):
     st.session_state["teams"].append({"name":_name,"points":0,"players":[],"icon":None})
 
+def removeTeam(_teamName):
+    for team in st.session_state["teams"]:
+        if team==_teamName:
+            st.session_state["teams"].remove(team)
+            break
+
+def removePlayerFromTeam(_playerName,_teamName):
+    for team in st.session_state["teams"]:
+        if team["name"]==_teamName:
+            team["players"].remove(_playerName)
+            break
+    
+    for player in st.session_state["players"]:
+        if player["name"]==_playerName:
+            player["team"]=None
+
 def addPlayerToTeam(_playerName,_teamName):
     for team in st.session_state["teams"]:
         if team["name"]==_teamName:
@@ -217,7 +233,7 @@ with tabs[2]:
                 
                 st.divider()
 
-                newPlayerName = st.text_input(f"Add a player to {team["name"]}")
+                newPlayerName = st.text_input(f"Add/Remove a player to {team["name"]}")
                 
                 existingPlayer=False
                 for player in st.session_state["players"]:
@@ -225,7 +241,16 @@ with tabs[2]:
                         existingPlayer=True
                 
                 if existingPlayer:
-                    st.button(f"Add player to {team["name"]}",on_click=addPlayerToTeam,args=(newPlayerName,team["name"]))
+                    inTeam=False
+                    for player in team["players"]:
+                        if player==newPlayerName:
+                            inTeam=True
+                            break
+                    
+                    if inTeam:
+                        st.button(f"Remove player from {team["name"]}",on_click=removePlayerFromTeam,args=(newPlayerName,team["name"]))
+                    else:
+                        st.button(f"Add player to {team["name"]}",on_click=addPlayerToTeam,args=(newPlayerName,team["name"]))
                 else:
                     st.write("That player doesnt exist")
 
@@ -233,13 +258,22 @@ with tabs[2]:
 
     
     st.divider()
-    st.header("New Team")
+    st.header("Add/Remove Team")
 
     newTeamName=st.text_input("Team Name")
     if newTeamName == "":
         st.write("Give the team a name first")
     else:
-        st.button("Make Team",on_click=addTeam,args=(newTeamName,))
+        existingTeam=False
+        for team in st.session_state["teams"]:
+            if team["name"]==newTeamName:
+                existingTeam=True
+                break
+        
+        if not existingTeam:
+            st.button("Make Team",on_click=addTeam,args=(newTeamName,))
+        else:
+            st.button("Remove Team",on_click=removeTeam,args=(newTeamName,))
 
 
         
