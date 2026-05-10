@@ -32,7 +32,7 @@ def addTeam(_name):
 
 def removeTeam(_teamName):
     for team in st.session_state["teams"]:
-        if team==_teamName:
+        if team["name"]==_teamName:
             st.session_state["teams"].remove(team)
             break
 
