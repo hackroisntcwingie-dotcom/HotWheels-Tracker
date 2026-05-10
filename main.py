@@ -162,11 +162,11 @@ with tabs[1]:
 
                 if player["editingLore"]:
                     player["lore"]=st.text_input(f"{player['name']}'s lore",player["lore"],label_visibility="hidden")
-                    st.button("Submit Lore",on_click=toggleEditLore,args=(player,))
+                    st.button(f"Submit {player["name"]}'s Lore",on_click=toggleEditLore,args=(player,))
                 else:
                     with st.container(border=True):
                         st.write(player["lore"])
-                        st.button("Edit lore",on_click=toggleEditLore,args=(player,))
+                        st.button(f"Edit {player["name"]}'s lore",on_click=toggleEditLore,args=(player,))
             
                 st.button(f"Remove {player["name"]}",on_click=removePlayer,args=(player,))
     
