@@ -61,13 +61,11 @@ def removePlayer(_player):
 
 def calcPoints(_team):
     points=0
-    for team in st.session_state["teams"]:
-        if team["name"]==_team:
-            for teamPlayer in team["players"]:
-                for player in st.session_state["players"]:
-                    if teamPlayer==player["name"]:
-                        points+=player["points"]
-            return points
+    for teamPlayer in _team["players"]:
+        for player in st.session_state["players"]:
+            if teamPlayer==player["name"]:
+                points+=player["points"]
+        return points
 
 def newRace(_racers):
     st.balloons()
@@ -136,7 +134,7 @@ with tabs[0]:
             else:
                 for team in st.session_state["teams"]:
                     if team["name"]==racer["team"]:
-                        teamPoints.append(team["points"])
+                        teamPoints.append(calcPoints(team))
                         break
             
 
@@ -212,7 +210,7 @@ with tabs[2]:
         st.write("Make a team first")
     else:
         for team in st.session_state["teams"]:
-            team["points"]=calcPoints(team["name"])
+            team["points"]=calcPoints(team)
             container=st.container(border=True)
             with container:
                 st.header(team["name"])
